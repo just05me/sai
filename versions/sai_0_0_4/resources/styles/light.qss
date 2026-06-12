@@ -1,0 +1,57 @@
+/* Sai — Light theme QSS */
+
+QMainWindow {
+    background-color: #f4f4f7;
+}
+
+QWidget {
+    color: #4c4f69;
+}
+
+QGraphicsView {
+    border: none;
+    background: transparent;
+}
+
+QSplitter::handle {
+    background: #e2e2e9;
+    width: 1px;
+}
+
+QScrollBar:vertical {
+    width: 6px;
+    background: transparent;
+}
+
+QScrollBar::handle:vertical {
+    background: #d0d0da;
+    border-radius: 3px;
+    min-height: 20px;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0;
+}
+
+QToolTip {
+    background: #ffffff;
+    color: #4c4f69;
+    border: 1px solid #e2e2e9;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+QMenu {
+    background: #ffffff;
+    color: #4c4f69;
+    border: 1px solid #e2e2e9;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+QMenu::item:selected {
+    background: #743354;
+    color: white;
+    border-radius: 6px;
+}
