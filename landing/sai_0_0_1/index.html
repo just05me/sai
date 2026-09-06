@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sai — open source ИИ-кофаундер для проектирования продуктов через интерактивные деревья и бесконечный холст.">
+  <title>Sai — ИИ-кофаундер и архитектор проектов</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="#hero">Sai</a>
+    <nav class="menu">
+      <a href="#problem">Зачем</a>
+      <a href="#how">Как работает</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#stack">Технологии</a>
+    </nav>
+    <a class="btn btn-ghost" href="#cta">Попробовать</a>
+  </header>
+
+  <main>
+    <section id="hero" class="hero section">
+      <div class="chip-row">
+        <span class="chip">Open Source</span>
+        <span class="chip">BYOK API</span>
+        <span class="chip">Native Linux MVP</span>
+      </div>
+      <h1>Проектируй продукт с ИИ, а не с пустого листа</h1>
+      <p class="lead">
+        Sai — нативное desktop-приложение, которое помогает пройти путь от идеи до связного технического задания:
+        через brainstorming, функциональные деревья, архитектурные решения и экспорт в Markdown.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#cta">Скачать MVP</a>
+        <a class="btn btn-secondary" href="#how">Посмотреть механику</a>
+      </div>
+    </section>
+
+    <section id="problem" class="section split">
+      <div>
+        <h2>Что закрывает Sai</h2>
+        <p>
+          Sai забирает на себя первичную аналитику уровня BSA, Product/Project менеджера и Team Lead:
+          структурирует хаотичную идею и превращает её в понятную карту разработки.
+        </p>
+      </div>
+      <ul class="checklist">
+        <li>Быстрый старт из глобального AI-чата</li>
+        <li>Визуализация на бесконечном холсте</li>
+        <li>Изолированные контексты чатов по узлам</li>
+        <li>Гибкий экспорт ТЗ по выбранным деревьям</li>
+      </ul>
+    </section>
+
+    <section id="how" class="section">
+      <h2>Три дерева — единая система мышления</h2>
+      <p class="subtext">
+        При первой синхронизации Sai формирует три взаимосвязанных дерева. Дальше изменения применяются
+        вручную по кнопке «Синхронизация», чтобы пользователь полностью контролировал каскад.
+      </p>
+      <div class="grid-3">
+        <article class="card">
+          <h3>Дерево функционала</h3>
+          <p>Главное ядро продукта: что именно должен уметь сервис и зачем это пользователю.</p>
+        </article>
+        <article class="card">
+          <h3>Дерево разработки</h3>
+          <p>Roadmap реализации: архитектура, технологии, этапы сборки и технические зависимости.</p>
+        </article>
+        <article class="card">
+          <h3>Дерево бизнес-логики</h3>
+          <p>Пользовательский путь от первого касания до целевого действия и ценности продукта.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Функции MVP</h2>
+      <div class="grid-2">
+        <article class="card">
+          <h3>Infinite Canvas</h3>
+          <p>Dot-grid фон, плавный pan/zoom, drag & drop узлов и связи кривыми Безье.</p>
+        </article>
+        <article class="card">
+          <h3>Изолированные чаты</h3>
+          <p>Каждый бокс живёт в собственном контексте: только нужный узел и его локальная история.</p>
+        </article>
+        <article class="card">
+          <h3>BYOK-подключение API</h3>
+          <p>Ты сам задаёшь API Key и Base URL для OpenAI-совместимых провайдеров (например, DeepSeek).</p>
+        </article>
+        <article class="card">
+          <h3>Локальное хранение</h3>
+          <p>`tree.json` + `chats/*.md` в директории проекта — прозрачно, офлайн-first и под твоим контролем.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="roadmap" class="section">
+      <h2>Roadmap v0.0.1 → v0.0.7</h2>
+      <ol class="timeline">
+        <li><strong>Stage 1:</strong> базовое окно и темная тема</li>
+        <li><strong>Stage 2:</strong> движок холста и навигация камеры</li>
+        <li><strong>Stage 3:</strong> узлы, порты и связи</li>
+        <li><strong>Stage 4:</strong> сохранение/загрузка в `tree.json`</li>
+        <li><strong>Stage 5:</strong> асинхронный LLM worker</li>
+        <li><strong>Stage 6:</strong> контекстные чаты узлов</li>
+        <li><strong>Stage 7:</strong> генератор итогового ТЗ</li>
+      </ol>
+    </section>
+
+    <section id="stack" class="section split">
+      <div>
+        <h2>Технологический стек</h2>
+        <p>
+          Python 3.12+, PySide6 и Scene Graph-подход на базе `QGraphicsScene` + `QGraphicsView`.
+          Никакого Electron/Tauri в ядре MVP.
+        </p>
+      </div>
+      <ul class="tags">
+        <li>Python</li>
+        <li>PySide6</li>
+        <li>QGraphicsScene</li>
+        <li>QThreadPool</li>
+        <li>Markdown Export</li>
+        <li>Catppuccin Dark</li>
+      </ul>
+    </section>
+
+    <section id="cta" class="section cta">
+      <h2>Готов собрать свой первый граф продукта?</h2>
+      <p>Sai создан для разработчиков, которым важно думать архитектурно, но двигаться быстро.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#">Открыть репозиторий</a>
+        <a class="btn btn-secondary" href="#">Скачать v0.0.1</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 Sai. Open Source desktop tool for builders.</p>
+  </footer>
+</body>
+</html>
