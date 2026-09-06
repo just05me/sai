@@ -1,0 +1,32 @@
+# dependencies & build
+node_modules/
+.next/
+.turbo/
+dist/
+out/
+build/
+tsconfig.tsbuildinfo
+
+# secrets & local env
+.env
+.env.*
+!.env.example
+
+# local data
+.pgdata/
+.minio-data/
+postgres-data/
+minio-data/
+redis-data/
+storage/
+
+# logs & OS
+*.log
+.DS_Store
+
+# editor / agent leftovers
+.idea/
+agentdb.rvf
+agentdb.rvf.lock
+ruvector.db
+.cursor/debug-*.log

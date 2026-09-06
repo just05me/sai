@@ -1,0 +1,10 @@
+FROM mcr.microsoft.com/playwright:v1.48.0-noble
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm install --legacy-peer-deps
+COPY . .
+RUN npx prisma generate
+ENV NODE_ENV=production
+# Проект не имеет dist-стадии — воркеры запускаются через tsx из src/ (как worker/collab).
+ENTRYPOINT ["npx", "tsx"]
+CMD ["src/workers/pdf.ts"]

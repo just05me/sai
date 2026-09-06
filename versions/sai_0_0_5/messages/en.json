@@ -1,0 +1,102 @@
+{
+  "app": {
+    "name": "Sai",
+    "tagline": "Three trees of one idea: tech, product, business"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "explore": "Explore",
+    "templates": "Templates",
+    "settings": "Settings",
+    "billing": "Billing",
+    "keys": "API keys",
+    "shortcuts": "Shortcuts",
+    "signOut": "Sign out"
+  },
+  "landing": {
+    "heroTitle": "Turn ideas into knowledge maps in 3 minutes",
+    "heroSub": "Sai blends an n8n-style canvas, NotebookLM-style mind map, and Sai Desktop's three-tree model. AI expands, refactors and bridges nodes — you stay in control.",
+    "tryNow": "Try without signup",
+    "signIn": "Sign in",
+    "feature1": "Three linked trees",
+    "feature2": "BYOK without token markup",
+    "feature3": "Real-time collaboration on Yjs"
+  },
+  "capture": {
+    "title": "Describe your idea in one sentence",
+    "placeholder": "e.g. SaaS for podcast editing with AI transcription",
+    "submit": "Generate map →",
+    "loading": "AI is growing your tree…",
+    "continueAnon": "Anonymous session active for 24 hours",
+    "saveAccount": "Save and sign up"
+  },
+  "tree": { "DEV": "Development", "FUNC": "Features", "BIZ": "Business" },
+  "canvas": {
+    "addNode": "Add node",
+    "fitView": "Fit to screen",
+    "focusMode": "Focus",
+    "minimap": "Minimap",
+    "noDescription": "no description"
+  },
+  "ai": {
+    "expand": "Expand (E)",
+    "deepen": "Deepen (D)",
+    "refactor": "Refactor (R)",
+    "bridge": "Bridge (B)",
+    "thinking": "AI is thinking…",
+    "longerThinking": "Complex request, needs a few more seconds…",
+    "accept": "Accept",
+    "acceptSelected": "Accept selected",
+    "skip": "Skip",
+    "preview": "Preview",
+    "errorKey": "{provider} key is invalid",
+    "fixKey": "Update key",
+    "errorRate": "Provider rate limit exceeded",
+    "errorDown": "Provider temporarily unavailable",
+    "retry": "Retry"
+  },
+  "chat": {
+    "global": "Global Chat",
+    "node": "Node Chat",
+    "send": "Send",
+    "stop": "Stop",
+    "personas": {
+      "investor": "Investor",
+      "devilsAdvocate": "Devil's Advocate",
+      "customer": "Customer",
+      "architect": "Architect",
+      "mentor": "Mentor"
+    }
+  },
+  "limits": {
+    "warn80": "80% of Free plan used. Consider upgrading.",
+    "block100": "Limit reached. Project is read-only.",
+    "upgrade": "Upgrade to Pro"
+  },
+  "export": {
+    "title": "Export",
+    "markdown": "Markdown",
+    "json": "JSON",
+    "png": "PNG",
+    "svg": "SVG",
+    "pdf": "PDF",
+    "mermaid": "Mermaid",
+    "pptx": "Pitch Deck"
+  },
+  "byok": {
+    "title": "Bring Your Own Key",
+    "subtitle": "Sai never marks up tokens and never shares your key.",
+    "addProvider": "Add provider",
+    "verify": "Verify",
+    "encryptedNotice": "Key is encrypted with AES-256-GCM before leaving your browser."
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "rename": "Rename",
+    "create": "Create",
+    "loading": "Loading…"
+  }
+}
