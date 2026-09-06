@@ -1,4 +1,3 @@
-# dependencies & build
 node_modules/
 .next/
 .turbo/
@@ -7,26 +6,36 @@ out/
 build/
 tsconfig.tsbuildinfo
 
-# secrets & local env
 .env
 .env.*
 !.env.example
+.env*.local
 
-# local data
-.pgdata/
-.minio-data/
-postgres-data/
-minio-data/
-redis-data/
-storage/
-
-# logs & OS
 *.log
 .DS_Store
 
-# editor / agent leftovers
+.vscode/
 .idea/
+.cursor/debug-*.log
+
+prisma/dev.db
+prisma/migrations/**/migration.sql.bak
+
+coverage/
+.nyc_output/
+.vercel
+.cache/
+playwright-report/
+test-results/
+lighthouse-report.json
+
+storage/
+minio-data/
+.minio-data/
+postgres-data/
+.pgdata/
+redis-data/
+
 agentdb.rvf
 agentdb.rvf.lock
 ruvector.db
-.cursor/debug-*.log
