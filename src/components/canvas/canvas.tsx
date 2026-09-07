@@ -21,6 +21,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { toast } from 'sonner';
 import type { Edge as DbEdge } from '@prisma/client';
 import { TREE_META, type TreeKey } from '@/lib/utils';
+import { computeMindMapLayout } from '@/lib/layouts/mindmap';
 import { useCanvasStore } from '@/lib/store';
 import { NodeCard, type SaiNodeData } from './node-card';
 import { trpc } from '@/trpc-client';
@@ -55,6 +56,7 @@ interface CanvasProps {
   workspaceId: string;
   projectId: string;
   activeTree: TreeKey;
+  viewMode?: 'graph' | 'mindmap';
   dbNodes: DbNodeWithTree[];
   dbEdges: DbEdge[];
   onSelect: (nodeId: string | null) => void;
@@ -62,7 +64,7 @@ interface CanvasProps {
 
 const nodeTypes = { sai: NodeCard };
 
-function CanvasInner({ workspaceId, projectId, activeTree, dbNodes, dbEdges, onSelect }: CanvasProps) {
+function CanvasInner({ workspaceId, projectId, activeTree, viewMode = 'graph', dbNodes, dbEdges, onSelect }: CanvasProps) {
   const { focusedNodeId, showMinimap, selectedNodeIds, setFocused, setActiveTree, setSelection } =
     useCanvasStore();
   const utils = trpc.useUtils();
@@ -106,6 +108,20 @@ function CanvasInner({ workspaceId, projectId, activeTree, dbNodes, dbEdges, onS
     });
   }, [dbEdges, dbNodes, activeTree]);
 
+  const mindMapPositions = useMemo(() => {
+    if (viewMode !== 'mindmap') return null;
+    const rawNodes = treeNodes.map((n) => ({
+      id: n.id,
+      title: n.title,
+      parentId: n.parentId,
+      treeKind: n.treeKind,
+    }));
+    const layoutEdges = treeNodes
+      .filter((n) => n.parentId)
+      .map((n) => ({ sourceId: n.parentId!, targetId: n.id }));
+    return computeMindMapLayout(rawNodes, layoutEdges);
+  }, [viewMode, treeNodes]);
+
   const rfNodes: Node<SaiNodeData>[] = useMemo(() => {
     const positioned = treeNodes.map((n) => ({
       id: n.id,
@@ -115,10 +131,13 @@ function CanvasInner({ workspaceId, projectId, activeTree, dbNodes, dbEdges, onS
     const byId = new Map(treeNodes.map((n) => [n.id, n] as const));
     return positioned.map((p) => {
       const n = byId.get(p.id)!;
+      const stored = n.position ?? { x: 0, y: 0 };
+      const layout = mindMapPositions?.get(n.id);
+      const position = layout ?? stored;
       return {
         id: n.id,
         type: 'sai',
-        position: p.position,
+        position,
         data: {
           title: n.title,
           description: n.description,
@@ -130,7 +149,7 @@ function CanvasInner({ workspaceId, projectId, activeTree, dbNodes, dbEdges, onS
         },
       };
     });
-  }, [treeNodes, focusedNodeId]);
+  }, [treeNodes, focusedNodeId, mindMapPositions]);
 
   const rfEdges: Edge[] = useMemo(() => {
     const treeKindById = new Map(dbNodes.map((n) => [n.id, n.treeKind] as const));
@@ -173,7 +192,7 @@ function CanvasInner({ workspaceId, projectId, activeTree, dbNodes, dbEdges, onS
   useEffect(() => {
     const t = setTimeout(() => reactFlow.fitView({ duration: 400, padding: 0.2 }), 80);
     return () => clearTimeout(t);
-  }, [activeTree, reactFlow]);
+  }, [activeTree, viewMode, reactFlow]);
 
   const handleNodesChange = useCallback(
     (changes: NodeChange<Node<SaiNodeData>>[]) => {

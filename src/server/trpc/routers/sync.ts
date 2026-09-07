@@ -18,12 +18,11 @@ export const syncRouter = router({
         targetNodeId: z.string(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       return SyncService.createBridge(
         input.projectId,
         input.sourceNodeId,
         input.targetNodeId,
-        ctx.session.user.id,
       );
     }),
 });

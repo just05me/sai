@@ -146,6 +146,7 @@ export function ProjectWorkspace({ project }: Props) {
                 workspaceId={project.workspaceId}
                 projectId={project.id}
                 activeTree={activeTree}
+                viewMode={viewMode}
                 dbNodes={nodesQuery.data as unknown as DbNodeWithTree[]}
                 dbEdges={edgesQuery.data}
                 onSelect={setSelectedNodeId}
