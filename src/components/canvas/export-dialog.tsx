@@ -21,7 +21,7 @@ const TREE_KEYS: TreeKey[] = ['DEV', 'FUNC', 'BIZ'];
 
 const FORMATS: { value: Format; label: string; hint: string; icon: typeof FileText }[] = [
   { value: 'md', label: 'Markdown', hint: 'файл .md', icon: FileText },
-  { value: 'pdf', label: 'PDF', hint: 'печать из браузера', icon: FileType },
+  { value: 'pdf', label: 'PDF', hint: 'файл .pdf', icon: FileType },
   { value: 'txt', label: 'TXT', hint: 'простой текст', icon: FileText },
 ];
 
@@ -58,18 +58,13 @@ export function ExportDialog({ projectId, projectName }: Props) {
       trees: selectedTrees.join(','),
     });
     const url = `/api/export/${projectId}?${params.toString()}`;
-
-    if (format === 'pdf') {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    } else {
-      const suffix = audience === 'ai' ? '-prompt' : '';
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${projectName}${suffix}.${format}`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
+    const suffix = audience === 'ai' ? '-prompt' : '';
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${projectName}${suffix}.${format}`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
     setOpen(false);
   };
 

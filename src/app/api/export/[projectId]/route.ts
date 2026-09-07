@@ -6,7 +6,10 @@ export const runtime = 'nodejs';
 
 const FORMATS: ExportFormat[] = ['md', 'txt', 'pdf', 'json', 'mermaid'];
 
-/** ASCII fallback + RFC 5987 UTF-8 filename (кириллица ломает ByteString в Response headers). */
+function toResponseBody(body: string | Buffer): BodyInit {
+  if (typeof body === 'string') return body;
+  return Uint8Array.from(body);
+}
 function buildContentDisposition(disposition: 'attachment' | 'inline', filename: string): string {
   const asciiFallback =
     filename
@@ -47,7 +50,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ projectI
   const safeName = project.name.replace(/[^\p{L}\p{N}\-_ ]/gu, '').trim() || 'project';
   const filename = `${safeName}${suffix}.${ext}`;
 
-  return new Response(body, {
+  const responseBody = toResponseBody(body);
+
+  return new Response(responseBody, {
     headers: {
       'Content-Type': contentType,
       'Content-Disposition': buildContentDisposition(disposition, filename),

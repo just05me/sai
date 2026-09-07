@@ -1,27 +1,21 @@
 /**
  * ExportService — единая точка для всех форматов (F-400…F-410).
- * PNG/SVG генерится на клиенте (canvas.toDataURL / react-flow getNodesBounds).
- * Markdown, JSON, Mermaid — сервер. PDF — отдельный Playwright воркер.
+ * PNG/SVG генерится на клиенте. PDF — @react-pdf/renderer на сервере.
  */
 import { prisma } from '@/server/prisma';
 import { exportMarkdown } from '@/lib/exporters/markdown';
 import { exportText } from '@/lib/exporters/text';
-import { exportHtml } from '@/lib/exporters/html';
 import { exportJSON } from '@/lib/exporters/json';
 import { exportMermaid } from '@/lib/exporters/mermaid';
+import { exportPdf } from '@/lib/exporters/pdf';
 import type { ExportAudience } from '@/lib/exporters/spec';
 
 export type ExportFormat = 'md' | 'txt' | 'pdf' | 'json' | 'mermaid';
 export type { ExportAudience } from '@/lib/exporters/spec';
 
-/**
- * Возвращает body + content-type. `disposition: 'inline'` означает, что
- * результат должен открываться во вкладке (PDF печатается из браузера),
- * иначе — скачивается как файл.
- */
 export type ExportResult = {
   contentType: string;
-  body: string;
+  body: string | Buffer;
   disposition: 'attachment' | 'inline';
   ext: string;
 };
@@ -67,9 +61,9 @@ export const ExportService = {
         };
       case 'pdf':
         return {
-          contentType: 'text/html; charset=utf-8',
-          body: exportHtml(project, filteredTrees, nodes, audience, edges),
-          disposition: 'inline',
+          contentType: 'application/pdf',
+          body: await exportPdf(project, filteredTrees, nodes, audience, edges),
+          disposition: 'attachment',
           ext: 'pdf',
         };
       case 'json':
@@ -86,6 +80,10 @@ export const ExportService = {
           disposition: 'attachment',
           ext: 'mmd',
         };
+      default: {
+        const _exhaustive: never = format;
+        throw new Error(`Unsupported format: ${_exhaustive}`);
+      }
     }
   },
 };
