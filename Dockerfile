@@ -21,6 +21,7 @@ COPY . .
 RUN npx prisma generate
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
+RUN npx esbuild prisma/seed.ts --bundle --platform=node --packages=external --outfile=prisma/seed.cjs
 
 ###############################################################################
 #  STAGE 3 — runtime  (Next.js standalone, ≤500 МБ)
@@ -39,6 +40,7 @@ COPY --from=build /app/.next/static ./.next/static
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=build /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=build /app/node_modules/prisma ./node_modules/prisma
 
 EXPOSE 3000
 USER node

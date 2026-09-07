@@ -1,10 +1,9 @@
 # Sai 1.0 — минимальный docker-compose для self-host релиза.
-# Только Postgres (pgvector) + приложение. Без Redis/Hocuspocus/BullMQ/MinIO.
+# Только Postgres (pgvector) + приложение.
 #
 # Запуск: docker compose up -d
 #
 x-app-env: &app-env
-  SAI_MODE: ${SAI_MODE:-selfhost}
   NODE_ENV: production
   DATABASE_URL: postgresql://sai:sai@postgres:5432/sai?schema=public
   DIRECT_URL: postgresql://sai:sai@postgres:5432/sai?schema=public
@@ -39,7 +38,7 @@ services:
     image: sai-app:1.0
     container_name: sai-migration
     entrypoint: ['/bin/sh', '-c']
-    command: 'node_modules/.bin/prisma migrate deploy; echo "Seed skipped (tsx not in runtime)"'
+    command: 'node_modules/.bin/prisma migrate deploy && node prisma/seed.cjs'
     environment: *app-env
     depends_on:
       postgres:
