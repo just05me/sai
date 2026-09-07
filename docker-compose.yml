@@ -1,7 +1,7 @@
-# Sai 1.0 — минимальный docker-compose для self-host релиза.
-# Только Postgres (pgvector) + приложение.
+# Sai 1.0 — docker-compose для self-host.
 #
-# Запуск: docker compose up -d
+# Полный стек:              docker compose up -d
+# Только Postgres (dev):    POSTGRES_PORT=5434 docker compose up postgres -d
 #
 x-app-env: &app-env
   NODE_ENV: production
@@ -55,7 +55,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
-      - '5432:5432'
+      - '${POSTGRES_PORT:-5432}:5432'
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U sai']
       interval: 5s

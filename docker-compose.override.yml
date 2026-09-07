@@ -1,4 +1,0 @@
-# Sai 1.0 — override для продакшена: скрываем порты базы.
-services:
-  postgres:
-    ports: !reset []

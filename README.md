@@ -27,7 +27,7 @@ cp .env.example .env
 # BYOK_SERVER_SECRET=$(openssl rand -base64 32)
 
 npm install --legacy-peer-deps
-docker compose -f docker-compose.dev.yml up -d
+POSTGRES_PORT=5434 docker compose up postgres -d
 npx prisma migrate dev
 npm run db:seed
 npm run dev
