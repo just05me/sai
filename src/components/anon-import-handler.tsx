@@ -1,9 +1,9 @@
 'use client';
 
 /**
- * Срабатывает после возврата с /signin?callbackUrl=/workspace?import=anon —
- * читает sai_anon_token из localStorage и просит сервер развернуть Quick-Capture
- * skeleton в реальный проект. Удаляет ключи из localStorage и редиректит на проект.
+ * Срабатывает на /workspace?import=anon — читает sai_anon_token из localStorage
+ * и просит сервер развернуть Quick-Capture skeleton в реальный проект.
+ * Удаляет ключи из localStorage и редиректит на проект.
  */
 import { useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';

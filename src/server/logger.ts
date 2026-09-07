@@ -28,7 +28,7 @@ interface Logger {
 const SENSITIVE_KEYS = new Set([
   'apiKey', 'api_key', 'secret', 'password', 'token',
   'authorization', 'cookie', 'key', 'credentials',
-  'AUTH_SECRET', 'BYOK_SERVER_SECRET', 'STRIPE_SECRET_KEY',
+  'AUTH_SECRET', 'BYOK_SERVER_SECRET',
 ]);
 
 function redact(obj: Record<string, unknown>): Record<string, unknown> {
