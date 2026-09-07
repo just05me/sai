@@ -12,7 +12,6 @@ import {
   PanelLeftOpen,
   Settings,
   Sparkles,
-  Wallet,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -35,7 +34,6 @@ export function AppSidebar({ user, workspaces }: Props) {
     { href: '/projects/new', label: t('projects'), icon: FolderTree },
     { href: '/explore', label: t('explore'), icon: Compass },
     { href: '/settings/keys', label: t('keys'), icon: KeyRound },
-    { href: '/settings/billing', label: t('billing'), icon: Wallet },
     { href: '/settings', label: t('settings'), icon: Settings },
   ];
 

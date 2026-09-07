@@ -1,10 +1,7 @@
 /**
- * Простой Redis token-bucket rate limiter.
- *  - Используется для auth endpoints (5 r/min) и публичного API (план-зависимо).
- *  - Отдаёт заголовки X-RateLimit-* совместимые с GitHub-стилем.
- *  - Sai 1.0 selfhost: если Redis недоступен, fail-open (пропускаем запрос).
+ * In-memory token-bucket rate limiter (Sai 1.0 selfhost).
+ * Отдаёт заголовки X-RateLimit-* в GitHub-стиле.
  */
-import { redis } from './redis';
 
 export interface RateLimitResult {
   ok: boolean;
@@ -12,6 +9,13 @@ export interface RateLimitResult {
   remaining: number;
   resetAt: Date;
 }
+
+interface Bucket {
+  count: number;
+  resetAt: number;
+}
+
+const buckets = new Map<string, Bucket>();
 
 export async function rateLimit(opts: {
   key: string;
@@ -21,21 +25,20 @@ export async function rateLimit(opts: {
   const { key, limit, windowSec } = opts;
   const nowSec = Math.floor(Date.now() / 1000);
   const windowStart = Math.floor(nowSec / windowSec);
-  const redisKey = `rl:${key}:${windowStart}`;
+  const bucketKey = `rl:${key}:${windowStart}`;
+  const resetAtMs = (windowStart + 1) * windowSec * 1000;
 
-  try {
-    const tx = redis.multi();
-    tx.incr(redisKey);
-    tx.expire(redisKey, windowSec);
-    const [[, currentRaw]] = (await tx.exec()) as [[Error | null, number]];
-    const current = Number(currentRaw);
-    const remaining = Math.max(0, limit - current);
-    const resetAt = new Date((windowStart + 1) * windowSec * 1000);
-    return { ok: current <= limit, limit, remaining, resetAt };
-  } catch {
-    // Redis недоступен (selfhost без Redis) — fail-open.
-    return { ok: true, limit, remaining: limit, resetAt: new Date(Date.now() + windowSec * 1000) };
-  }
+  const existing = buckets.get(bucketKey);
+  const count = (existing?.count ?? 0) + 1;
+  buckets.set(bucketKey, { count, resetAt: resetAtMs });
+
+  const remaining = Math.max(0, limit - count);
+  return {
+    ok: count <= limit,
+    limit,
+    remaining,
+    resetAt: new Date(resetAtMs),
+  };
 }
 
 export function rateLimitHeaders(r: RateLimitResult): Record<string, string> {

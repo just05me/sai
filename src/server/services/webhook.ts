@@ -1,12 +1,8 @@
 /**
- * WebhookService — outbound webhook delivery с HMAC-подписью и retry через BullMQ.
+ * WebhookService — outbound webhook delivery с HMAC-подписью (синхронно, без очереди).
  */
-import { Queue } from 'bullmq';
 import { prisma } from '@/server/prisma';
-import { redis } from '@/server/redis';
 import { webhookSignature } from '@/server/crypto';
-
-const queue = new Queue('webhooks', { connection: redis });
 
 type Event =
   | 'project.created'
@@ -23,8 +19,7 @@ export const WebhookService = {
     });
     for (const ep of endpoints) {
       if (!ep.events.includes(event) && !ep.events.includes('*')) continue;
-      // event кладём и в job-name, и в payload — воркер читает payload.event при записи WebhookDelivery.
-      await queue.add(event, { endpointId: ep.id, event, payload });
+      await this.deliver(ep.id, event, payload);
     }
   },
 

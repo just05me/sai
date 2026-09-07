@@ -1,10 +1,7 @@
 import { z } from 'zod';
-import { TRPCError } from '@trpc/server';
 import { TreeKind } from '@prisma/client';
 import { router, workspaceProcedure, assertProjectInWorkspace } from '../trpc';
-import { isCloud } from '@/env';
 
-const FREE_PROJECT_LIMIT = 5;
 const FREE_NODE_LIMIT = 100;
 
 export const projectsRouter = router({
@@ -39,20 +36,6 @@ export const projectsRouter = router({
       fromTemplateId: z.string().optional(),
     }))
     .mutation(async ({ ctx, input }) => {
-      if (isCloud) {
-        const ws = await ctx.prisma.workspace.findUniqueOrThrow({ where: { id: ctx.workspaceId } });
-        if (ws.plan === 'FREE') {
-          const count = await ctx.prisma.project.count({
-            where: { workspaceId: ctx.workspaceId, archivedAt: null },
-          });
-          if (count >= FREE_PROJECT_LIMIT) {
-            throw new TRPCError({
-              code: 'FORBIDDEN',
-              message: `Free план: лимит ${FREE_PROJECT_LIMIT} проектов`,
-            });
-          }
-        }
-      }
       const project = await ctx.prisma.project.create({
         data: {
           workspaceId: ctx.workspaceId,

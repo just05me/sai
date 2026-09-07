@@ -28,6 +28,7 @@ export default function LandingPage() {
     <div className={styles.root}>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      {/* eslint-disable-next-line @next/next/no-page-custom-font -- landing-only typography */}
       <link
         href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet"
@@ -271,8 +272,8 @@ export default function LandingPage() {
                     <path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M18 4v3.5h-3.5M6 20v-3.5h3.5" />
                   </svg>
                 </div>
-                <h3>Real-time коллаборация</h3>
-                <p>Yjs CRDT через Hocuspocus. Offline-first с локальным IndexedDB.</p>
+                <h3>Three-tree sync</h3>
+                <p>Анализ несоответствий между DEV, FUNC и BIZ. Bridge-связи сшивают модели.</p>
               </div>
               <div className={`${styles.feature} ${styles.f4}`}>
                 <div className={styles.ic}>
