@@ -9,11 +9,15 @@ import { AiProvider, type ByokKey } from '@prisma/client';
 import { prisma } from '@/server/prisma';
 import { decryptByokKey } from '@/server/crypto';
 
+type AiSdkProvider =
+  | ReturnType<typeof createOpenAI>
+  | ReturnType<typeof createAnthropic>
+  | ReturnType<typeof createOpenAICompatible>;
+
 export interface ResolvedProvider {
   provider: AiProvider;
   model: string;
-  /** generic generator interface from Vercel AI SDK */
-  client: any;
+  client: AiSdkProvider;
   baseUrl?: string;
 }
 

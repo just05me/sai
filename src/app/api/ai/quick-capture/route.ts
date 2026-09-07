@@ -70,7 +70,11 @@ export async function POST(req: Request) {
   if (!parsed.success) return Response.json(parsed.error.flatten(), { status: 400 });
 
   const session = await auth();
-  let skeleton: any;
+  if (!session?.user?.id) {
+    return new Response('Unauthorized', { status: 401 });
+  }
+
+  let skeleton: Awaited<ReturnType<typeof MindMapService.generateFromIdea>> | typeof MOCK_SKELETON;
 
   // Локальный пользователь: генерируем по его BYOK-ключу, а если ключа нет —
   // отдаём mock-скелет, чтобы Quick Capture работал «из коробки».

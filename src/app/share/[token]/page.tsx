@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ShareService } from '@/server/services/share';
 import { prisma } from '@/server/prisma';
@@ -73,7 +74,7 @@ export default async function SharePage({ params, searchParams }: Props) {
         })}
       </div>
       <footer className="mt-12 border-t pt-4 text-center text-xs text-muted-foreground">
-        <a href="/" className="hover:underline">Made with Sai</a>
+        <Link href="/" className="hover:underline">Made with Sai</Link>
       </footer>
     </main>
   );

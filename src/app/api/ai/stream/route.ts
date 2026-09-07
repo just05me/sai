@@ -1,6 +1,5 @@
 /**
  * SSE streaming для Global Chat / Node Chat.
- * F-255 streaming, F-225 AI Context Memory подмешивается через AIMemoryService.
  */
 import { streamText, convertToCoreMessages, tool } from 'ai';
 import { z } from 'zod';
@@ -187,7 +186,9 @@ ${ctxString}${nodeContext}`;
   const result = streamText({
     model: resolved.client(resolved.model),
     system,
-    messages: convertToCoreMessages(messages as any),
+    messages: convertToCoreMessages(
+      messages as Array<{ role: 'user' | 'assistant' | 'system'; content: string }>,
+    ),
     maxSteps: 4,
     abortSignal: req.signal,
     tools: {

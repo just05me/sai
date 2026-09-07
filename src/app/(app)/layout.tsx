@@ -5,6 +5,7 @@ import { prisma } from '@/server/prisma';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
+  if (!session?.user?.id) return null;
 
   const memberships = await prisma.workspaceMember.findMany({
     where: { userId: session.user.id },

@@ -15,7 +15,6 @@ import {
 import { trpc } from '@/trpc-client';
 import { TREE_META, cn, type TreeKey } from '@/lib/utils';
 import type { SyncIssue, SyncResult } from '@/server/services/sync';
-import { toast } from 'sonner';
 
 interface Props {
   workspaceId: string;
@@ -30,9 +29,6 @@ export function SyncDialog({ workspaceId, projectId }: Props) {
     { workspaceId, projectId },
     { enabled: false },
   );
-
-  const createBridge = trpc.sync.createBridge.useMutation();
-  const utils = trpc.useUtils();
 
   const handleAnalyze = async () => {
     const res = await analyzeQuery.refetch();

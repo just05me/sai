@@ -1,48 +1,32 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-
-// Мокаем Redis — он недоступен (selfhost-режим)
-vi.mock('@/server/redis', () => ({
-  redis: {
-    multi: () => {
-      throw new Error('Redis unavailable');
-    },
-  },
-}));
+import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('Rate Limiter', () => {
   let rateLimit: typeof import('@/server/ratelimit').rateLimit;
   let rateLimitHeaders: typeof import('@/server/ratelimit').rateLimitHeaders;
 
   beforeEach(async () => {
-    vi.resetModules();
     const mod = await import('@/server/ratelimit');
     rateLimit = mod.rateLimit;
     rateLimitHeaders = mod.rateLimitHeaders;
   });
 
-  it('fail-open: пропускает запрос когда Redis недоступен', async () => {
-    const result = await rateLimit({
-      key: 'test:user:1',
-      limit: 5,
-      windowSec: 60,
-    });
-
-    expect(result.ok).toBe(true);
-    expect(result.limit).toBe(5);
-    expect(result.remaining).toBe(5);
+  it('пропускает запросы в пределах лимита', async () => {
+    const key = `test:${Date.now()}`;
+    const r1 = await rateLimit({ key, limit: 3, windowSec: 60 });
+    const r2 = await rateLimit({ key, limit: 3, windowSec: 60 });
+    expect(r1.ok).toBe(true);
+    expect(r2.ok).toBe(true);
+    expect(r2.remaining).toBe(1);
   });
 
-  it('возвращает валидный resetAt даже без Redis', async () => {
-    const result = await rateLimit({
-      key: 'test:user:2',
-      limit: 10,
-      windowSec: 30,
-    });
-
-    expect(result.resetAt).toBeInstanceOf(Date);
-    const resetIn = result.resetAt.getTime() - Date.now();
-    expect(resetIn).toBeGreaterThan(0);
-    expect(resetIn).toBeLessThanOrEqual(30_000);
+  it('блокирует при превышении лимита', async () => {
+    const key = `test:block:${Date.now()}`;
+    for (let i = 0; i < 2; i++) {
+      await rateLimit({ key, limit: 2, windowSec: 60 });
+    }
+    const blocked = await rateLimit({ key, limit: 2, windowSec: 60 });
+    expect(blocked.ok).toBe(false);
+    expect(blocked.remaining).toBe(0);
   });
 
   it('rateLimitHeaders возвращает правильные заголовки', () => {
@@ -52,11 +36,9 @@ describe('Rate Limiter', () => {
       remaining: 7,
       resetAt: new Date(Date.now() + 60_000),
     };
-
     const headers = rateLimitHeaders(result);
     expect(headers['X-RateLimit-Limit']).toBe('10');
     expect(headers['X-RateLimit-Remaining']).toBe('7');
-    expect(headers['X-RateLimit-Reset']).toBeTruthy();
     expect(Number(headers['X-RateLimit-Reset'])).toBeGreaterThan(0);
   });
 });

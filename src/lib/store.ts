@@ -38,7 +38,8 @@ export const useCanvasStore = create<CanvasState>((set) => ({
   toggleSelect: (id, additive) =>
     set((s) => {
       const next = additive ? new Set(s.selectedNodeIds) : new Set<string>();
-      next.has(id) ? next.delete(id) : next.add(id);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
       return { selectedNodeIds: next };
     }),
   clearSelection: () => set({ selectedNodeIds: new Set() }),

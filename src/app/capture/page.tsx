@@ -42,7 +42,7 @@ export default function CapturePage() {
         }
         const data = (await res.json()) as SkeletonResponse;
         setResult(data);
-      } catch (err) {
+      } catch {
         toast.error('Сеть недоступна');
       }
     });

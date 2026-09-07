@@ -1,5 +1,6 @@
-import { z } from 'zod';
+import { Prisma } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 import {
   router,
   workspaceProcedure,
@@ -115,8 +116,11 @@ export const nodesRouter = router({
           source: 'user',
           authorId: ctx.user.id,
           diff: Object.fromEntries(
-            Object.entries(patch).map(([k, v]) => [k, { from: (before as any)[k], to: v }]),
-          ),
+            Object.entries(patch).map(([k, v]) => [
+              k,
+              { from: (before as Record<string, unknown>)[k], to: v },
+            ]),
+          ) as Prisma.InputJsonValue,
         },
       });
       return after;

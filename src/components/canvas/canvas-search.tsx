@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Search, X, ArrowRight, Loader2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { trpc } from '@/trpc-client';
@@ -14,7 +14,7 @@ interface Props {
   onNavigate: (nodeId: string, projectId: string) => void;
 }
 
-export function CanvasSearch({ workspaceId, projectId, open, onClose, onNavigate }: Props) {
+export function CanvasSearch({ workspaceId, projectId: _projectId, open, onClose, onNavigate }: Props) {
   const [query, setQuery] = useState('');
   const [selectedIdx, setSelectedIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -24,7 +24,7 @@ export function CanvasSearch({ workspaceId, projectId, open, onClose, onNavigate
     { enabled: query.length > 0, staleTime: 5000 },
   );
 
-  const results = searchQuery.data ?? [];
+  const results = useMemo(() => searchQuery.data ?? [], [searchQuery.data]);
 
   useEffect(() => {
     if (open) {

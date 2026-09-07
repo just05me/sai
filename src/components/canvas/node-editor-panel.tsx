@@ -34,7 +34,7 @@ export function NodeEditorPanel({ workspaceId, projectId, nodeId, onClose, onDee
       setTitle(node.title);
       setDescription(node.description ?? '');
     }
-  }, [node?.id]);
+  }, [node]);
 
   const invalidateGraph = () => {
     void utils.nodes.byProject.invalidate({ workspaceId, projectId });

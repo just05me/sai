@@ -13,6 +13,7 @@ interface PageProps {
 export default async function ProjectPage({ params }: PageProps) {
   const { projectId } = await params;
   const session = await auth();
+  if (!session?.user?.id) notFound();
 
   const project = await prisma.project.findUnique({
     where: { id: projectId },
